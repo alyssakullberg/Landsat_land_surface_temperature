@@ -1,6 +1,7 @@
 
 # Calculate land surface temperature (LST) using Landsat 8 or 9 imagery
-# Download full set of tiff files for a single scene from USGS EarthExplorer, and extract all the files of the scene into a single folder
+# based on the protocol outlined in Jeevalakshmi, D., Narayana Reddy, S., and Manikiam, B. 2017. Land Surface Temperature Retrieval from LANDSAT data using Emissivity Estimation. International Journal of Applied Engineering Research 12(20): 9679-9687.
+# Download full set of tiff files for a single scene from USGS EarthExplorer, and extract all the files of the scene into a local folder
 
 # Prepared by: Alyssa T. Kullberg
 # Last edited: 11/02/2022
@@ -22,8 +23,6 @@ est_LST <- function(satellite, path_B4, path_B5, path_B10, path_MTL, ext) {
   l5 <- crop(raster(paste0(path_B5)), ext1)
   l10 <- crop(raster(paste0(path_B10)), ext1)
   mtl <- read.delim(paste0(path_MTL))
-  
-  
   
   if(satellite == 9){
   # Extract thermal constants K1 and K2 from metadata
@@ -52,7 +51,7 @@ est_LST <- function(satellite, path_B4, path_B5, path_B10, path_MTL, ext) {
   e[ndvi<0] = 0.991 #water
   e[ndvi >=0 & ndvi <0.2] = 0.966 #soil
   w = which(ndvi[]>=0.2 & ndvi[]<0.5) #mix of soil and veg >
-  e[w] = (0.966 * (((ndvi[w]-0.2)/(0.5-0.2))^2)) + (0.966 * (1- (((ndvi[w]-0.2)/(0.5-0.2))^2))) + 0.005
+  e[w] = (0.966 * pv[w]) + (0.966 * (1- pv[w])) + 0.005
   e = mask(e, ndvi)   #mask to get NA NDVI values as NA e values
   
   # Calculate LST
