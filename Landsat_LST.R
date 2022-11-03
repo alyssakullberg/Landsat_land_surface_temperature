@@ -4,7 +4,7 @@
 # Download full set of tiff files for a single scene from USGS EarthExplorer, and extract all the files of the scene into a local folder
 
 # Prepared by: Alyssa T. Kullberg
-# Last edited: 11/02/2022
+# Last edited: 11/03/2022
 
 ## Load packages
 #install.packages("raster"")
